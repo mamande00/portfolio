@@ -1,0 +1,167 @@
+(() => {
+  const root = document.querySelector("[data-hero-slider]");
+  if (!root) return;
+
+  const track = root.querySelector("[data-hero-track]");
+  const prevBtn = root.querySelector("[data-hero-prev]");
+  const nextBtn = root.querySelector("[data-hero-next]");
+  const pauseBtn = root.querySelector("[data-hero-pause]");
+  const pauseLabel = root.querySelector("[data-hero-pause-label]");
+  const live = root.querySelector("[data-hero-live]");
+  const dotButtons = Array.from(root.querySelectorAll("[data-hero-dot]"));
+
+  if (!track || !prevBtn || !nextBtn || !pauseBtn || !pauseLabel || !live) return;
+
+  const slides = Array.from(track.querySelectorAll(".hero-slide"));
+  if (slides.length === 0) return;
+
+  const prefersReducedMotion = window.matchMedia?.(
+    "(prefers-reduced-motion: reduce)"
+  )?.matches;
+
+  let index = 0;
+  let isPaused = prefersReducedMotion ? true : false;
+  let timerId = null;
+  let startX = null;
+  let startY = null;
+  let isPointerDown = false;
+
+  function clampIndex(i) {
+    const n = slides.length;
+    return ((i % n) + n) % n;
+  }
+
+  function updateTransform() {
+    track.style.transform = `translateX(${-index * 100}%)`;
+  }
+
+  function updateDots() {
+    if (!dotButtons.length) return;
+    dotButtons.forEach((btn, i) => {
+      const selected = i === index;
+      btn.setAttribute("aria-selected", String(selected));
+      btn.setAttribute("tabindex", selected ? "0" : "-1");
+    });
+  }
+
+  function announce() {
+    const total = slides.length;
+    const label = slides[index]?.getAttribute("aria-label") || `Slide ${index + 1}`;
+    live.textContent = `${index + 1} / ${total}. ${label}`;
+  }
+
+  function setPaused(nextPaused) {
+    isPaused = nextPaused;
+    pauseBtn.setAttribute("aria-pressed", String(isPaused));
+    pauseLabel.textContent = isPaused ? "Play" : "Pause";
+
+    if (isPaused) {
+      stopAutoplay();
+    } else {
+      startAutoplay();
+    }
+  }
+
+  function goTo(i, { userInitiated = false } = {}) {
+    index = clampIndex(i);
+    updateTransform();
+    updateDots();
+    announce();
+    if (userInitiated) setPaused(true);
+  }
+
+  function next(opts) {
+    goTo(index + 1, opts);
+  }
+
+  function prev(opts) {
+    goTo(index - 1, opts);
+  }
+
+  function startAutoplay() {
+    if (prefersReducedMotion) return;
+    stopAutoplay();
+    timerId = window.setInterval(() => {
+      if (!isPaused) next({ userInitiated: false });
+    }, 3000);
+  }
+
+  function stopAutoplay() {
+    if (timerId) {
+      window.clearInterval(timerId);
+      timerId = null;
+    }
+  }
+
+  prevBtn.addEventListener("click", () => prev({ userInitiated: true }));
+  nextBtn.addEventListener("click", () => next({ userInitiated: true }));
+
+  pauseBtn.addEventListener("click", () => {
+    setPaused(!isPaused);
+  });
+
+  dotButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const raw = btn.getAttribute("data-hero-dot");
+      const i = raw ? Number(raw) : NaN;
+      if (!Number.isFinite(i)) return;
+      goTo(i, { userInitiated: true });
+    });
+  });
+
+  // Pause autoplay when the user interacts with the carousel region
+  root.addEventListener("pointerdown", () => setPaused(true));
+  root.addEventListener("focusin", () => setPaused(true));
+
+  // Touch / pointer swipe (mobile)
+  root.addEventListener("pointerdown", (e) => {
+    if (!(e instanceof PointerEvent)) return;
+    if (e.pointerType === "mouse") return;
+    isPointerDown = true;
+    startX = e.clientX;
+    startY = e.clientY;
+  });
+
+  root.addEventListener("pointerup", (e) => {
+    if (!(e instanceof PointerEvent)) return;
+    if (!isPointerDown || startX === null || startY === null) return;
+    isPointerDown = false;
+
+    const dx = e.clientX - startX;
+    const dy = e.clientY - startY;
+    startX = null;
+    startY = null;
+
+    // ignore mostly-vertical gestures
+    if (Math.abs(dy) > Math.abs(dx)) return;
+
+    const threshold = 40;
+    if (dx <= -threshold) next({ userInitiated: true });
+    if (dx >= threshold) prev({ userInitiated: true });
+  });
+
+  // Keyboard controls when focus is within the carousel
+  root.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowLeft") {
+      e.preventDefault();
+      prev({ userInitiated: true });
+    }
+    if (e.key === "ArrowRight") {
+      e.preventDefault();
+      next({ userInitiated: true });
+    }
+  });
+
+  // Close mobile menu after clicking a nav link
+  document.addEventListener("click", (e) => {
+    const a = e.target instanceof Element ? e.target.closest(".nav__link") : null;
+    const toggle = document.getElementById("nav-toggle");
+    if (a && toggle instanceof HTMLInputElement) toggle.checked = false;
+  });
+
+  // Init
+  updateTransform();
+  updateDots();
+  announce();
+  setPaused(isPaused);
+})();

@@ -1,0 +1,448 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Needesignlab — UX/UI Designer</title>
+    <meta name="description" content="Needesignlab — UX/UI designer portfolio." />
+    <meta name="author" content="Needesignlab" />
+
+    <meta property="og:title" content="Needesignlab — UX/UI Designer" />
+    <meta property="og:description" content="Needesignlab — UX/UI designer portfolio." />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="assets/images/og-image.png" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Needesignlab — UX/UI Designer" />
+    <meta
+      name="twitter:description"
+      content="Needesignlab — UX/UI designer portfolio."
+    />
+    <meta name="twitter:image" content="assets/images/og-image.png" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="css/style.css" />
+    <script src="js/main.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header" role="banner">
+      <div class="container">
+        <a class="brand" href="#hero" aria-label="Needesignlab home">Needesignlab</a>
+
+        <input
+          class="nav-toggle"
+          type="checkbox"
+          id="nav-toggle"
+          aria-label="Toggle menu"
+        />
+
+        <label class="nav-toggle__btn" for="nav-toggle">
+          <span class="nav-toggle__icon" aria-hidden="true"></span>
+          <span class="nav-toggle__text">Menu</span>
+        </label>
+
+        <nav class="nav" aria-label="Primary">
+          <a class="nav__link" href="#work">Work</a>
+          <a class="nav__link" href="#about">About</a>
+          <a class="nav__link" href="#contact">Contact</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main" class="site-main" role="main">
+      <section id="hero" class="section section--hero" aria-label="Hero">
+        <div class="container">
+          <div
+            class="hero-slider"
+            data-hero-slider
+            role="region"
+            aria-roledescription="carousel"
+            aria-label="Featured projects"
+          >
+            <div class="hero-slider__viewport">
+              <div class="hero-slider__track" data-hero-track>
+                <a
+                  class="hero-slide"
+                  href="project-mobile-1.html"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="View project: Mobile App — Subscription App Redesign"
+                >
+                  <div class="hero-slide__content">
+                    <p class="hero-slide__meta">Mobile App · UX/UI</p>
+                    <h1 class="hero-slide__title">Designer who makes things sell.</h1>
+                    <p class="hero-slide__subtext">
+                      UX/UI Designer · 9+ years · Seoul, Korea
+                    </p>
+                    <span class="btn hero-slide__cta">View Work</span>
+                  </div>
+                  <div class="hero-slide__media" aria-hidden="true">
+                    <img
+                      class="hero-slide__img"
+                      src="assets/images/hero-1.jpg"
+                      alt=""
+                      loading="eager"
+                      decoding="async"
+                    />
+                  </div>
+                </a>
+
+                <a
+                  class="hero-slide"
+                  href="project-web-1.html"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="View project: Web — Landing Page System"
+                >
+                  <div class="hero-slide__content">
+                    <p class="hero-slide__meta">Web · Conversion</p>
+                    <h2 class="hero-slide__title">Design systems that ship fast.</h2>
+                    <p class="hero-slide__subtext">
+                      UX/UI Designer · 9+ years · Seoul, Korea
+                    </p>
+                    <span class="btn hero-slide__cta">View Work</span>
+                  </div>
+                  <div class="hero-slide__media" aria-hidden="true">
+                    <img
+                      class="hero-slide__img"
+                      src="assets/images/hero-2.jpg"
+                      alt=""
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </div>
+                </a>
+
+                <a
+                  class="hero-slide"
+                  href="project-detail-1.html"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="View project: Detail Page — Product Story Layout"
+                >
+                  <div class="hero-slide__content">
+                    <p class="hero-slide__meta">Detail Page · E-commerce</p>
+                    <h2 class="hero-slide__title">Clarity that converts.</h2>
+                    <p class="hero-slide__subtext">
+                      UX/UI Designer · 9+ years · Seoul, Korea
+                    </p>
+                    <span class="btn hero-slide__cta">View Work</span>
+                  </div>
+                  <div class="hero-slide__media" aria-hidden="true">
+                    <img
+                      class="hero-slide__img"
+                      src="assets/images/hero-3.jpg"
+                      alt=""
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </div>
+                </a>
+              </div>
+            </div>
+
+            <div class="hero-slider__controls" aria-label="Carousel controls">
+              <button class="icon-btn" type="button" data-hero-prev>
+                <span aria-hidden="true">←</span>
+                <span class="sr-only">Previous</span>
+              </button>
+
+              <div class="hero-dots" role="tablist" aria-label="Select slide">
+                <button
+                  class="hero-dot"
+                  type="button"
+                  data-hero-dot="0"
+                  role="tab"
+                  aria-label="Slide 1"
+                ></button>
+                <button
+                  class="hero-dot"
+                  type="button"
+                  data-hero-dot="1"
+                  role="tab"
+                  aria-label="Slide 2"
+                ></button>
+                <button
+                  class="hero-dot"
+                  type="button"
+                  data-hero-dot="2"
+                  role="tab"
+                  aria-label="Slide 3"
+                ></button>
+              </div>
+
+              <button
+                class="icon-btn"
+                type="button"
+                data-hero-pause
+                aria-pressed="false"
+              >
+                <span class="hero-pause__label" data-hero-pause-label>Pause</span>
+              </button>
+
+              <button class="icon-btn" type="button" data-hero-next>
+                <span aria-hidden="true">→</span>
+                <span class="sr-only">Next</span>
+              </button>
+            </div>
+
+            <p class="sr-only" aria-live="polite" data-hero-live></p>
+          </div>
+        </div>
+      </section>
+      <section id="work" class="section section--work" aria-label="Work">
+        <div class="container">
+          <header class="section-head work-head">
+            <p class="section-head__label">Work</p>
+            <h2 class="section-head__title">Selected Projects</h2>
+          </header>
+
+          <!-- CSS-only filter targets -->
+          <span
+            id="work-filter-all"
+            class="work-filter-target"
+            aria-hidden="true"
+          ></span>
+          <span
+            id="work-filter-mobile"
+            class="work-filter-target"
+            aria-hidden="true"
+          ></span>
+          <span
+            id="work-filter-web"
+            class="work-filter-target"
+            aria-hidden="true"
+          ></span>
+          <span
+            id="work-filter-detail"
+            class="work-filter-target"
+            aria-hidden="true"
+          ></span>
+          <span
+            id="work-filter-education"
+            class="work-filter-target"
+            aria-hidden="true"
+          ></span>
+
+          <div class="work-filters" aria-label="Project category filters">
+            <a class="work-filters__link" href="#work-filter-all">All</a>
+            <a class="work-filters__link" href="#work-filter-mobile">Mobile App</a>
+            <a class="work-filters__link" href="#work-filter-web">Web</a>
+            <a class="work-filters__link" href="#work-filter-detail">Detail Page</a>
+            <a class="work-filters__link" href="#work-filter-education"
+              >Education</a
+            >
+          </div>
+
+          <div class="work-grid" aria-label="Portfolio projects grid">
+            <a
+              class="project-card project-card--detail"
+              href="project-detail-1.html"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Open project in new tab: Product Detail Layout"
+            >
+              <div class="project-card__thumb" aria-hidden="true"></div>
+              <div class="project-card__body">
+                <p class="project-card__category">Detail Page</p>
+                <h3 class="project-card__title">Product Detail Layout</h3>
+                <p class="project-card__desc">
+                  Better information density with stronger action cues.
+                </p>
+              </div>
+            </a>
+
+            <a
+              class="project-card project-card--detail"
+              href="project-detail-2.html"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Open project in new tab: Service Detail Experience"
+            >
+              <div class="project-card__thumb" aria-hidden="true"></div>
+              <div class="project-card__body">
+                <p class="project-card__category">Detail Page</p>
+                <h3 class="project-card__title">Service Detail Experience</h3>
+                <p class="project-card__desc">
+                  Reduced friction from intent to inquiry.
+                </p>
+              </div>
+            </a>
+
+            <a
+              class="project-card project-card--web"
+              href="project-web-1.html"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Open project in new tab: Landing Page System"
+            >
+              <div class="project-card__thumb" aria-hidden="true"></div>
+              <div class="project-card__body">
+                <p class="project-card__category">Web Design</p>
+                <h3 class="project-card__title">Landing Page System</h3>
+                <p class="project-card__desc">
+                  Modular sections built for campaigns and quick iteration.
+                </p>
+              </div>
+            </a>
+
+            <a
+              class="project-card project-card--web"
+              href="project-web-2.html"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Open project in new tab: Website UX Refresh"
+            >
+              <div class="project-card__thumb" aria-hidden="true"></div>
+              <div class="project-card__body">
+                <p class="project-card__category">Web Design</p>
+                <h3 class="project-card__title">Website UX Refresh</h3>
+                <p class="project-card__desc">
+                  Clearer navigation and improved content hierarchy.
+                </p>
+              </div>
+            </a>
+
+            <a
+              class="project-card project-card--mobile"
+              href="project-mobile-1.html"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Open project in new tab: Mobile App Redesign"
+            >
+              <div class="project-card__thumb" aria-hidden="true"></div>
+              <div class="project-card__body">
+                <p class="project-card__category">Mobile App Design</p>
+                <h3 class="project-card__title">Mobile App Redesign</h3>
+                <p class="project-card__desc">
+                  Cleaner onboarding and improved first-time retention.
+                </p>
+              </div>
+            </a>
+
+            <a
+              class="project-card project-card--mobile"
+              href="project-mobile-2.html"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Open project in new tab: E-commerce Mobile Flow"
+            >
+              <div class="project-card__thumb" aria-hidden="true"></div>
+              <div class="project-card__body">
+                <p class="project-card__category">Mobile App Design</p>
+                <h3 class="project-card__title">E-commerce Mobile Flow</h3>
+                <p class="project-card__desc">
+                  Faster product discovery with a conversion-focused cart.
+                </p>
+              </div>
+            </a>
+
+            <a
+              class="project-card project-card--branding"
+              href="project-branding-1.html"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Open project in new tab: Visual Identity Concepts"
+            >
+              <div class="project-card__thumb" aria-hidden="true"></div>
+              <div class="project-card__body">
+                <p class="project-card__category">Branding</p>
+                <h3 class="project-card__title">Visual Identity Concepts</h3>
+                <p class="project-card__desc">
+                  Minimal brand system with UI-ready components.
+                </p>
+              </div>
+            </a>
+
+            <a
+              class="project-card project-card--education"
+              href="project-education-1.html"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Open project in new tab: Design Workshop Series"
+            >
+              <div class="project-card__thumb" aria-hidden="true"></div>
+              <div class="project-card__body">
+                <p class="project-card__category">UX/UI Education</p>
+                <h3 class="project-card__title">Design Workshop Series</h3>
+                <p class="project-card__desc">
+                  Curriculum and exercises for practical UX improvements.
+                </p>
+              </div>
+            </a>
+          </div>
+        </div>
+      </section>
+      <section id="about" class="section section--about" aria-label="About">
+        <div class="container">
+          <header class="section-head">
+            <p class="section-head__label">About</p>
+            <h2 class="section-head__title">A bit about my approach</h2>
+          </header>
+
+          <div class="about">
+            <div class="about__bio">
+              <p>
+                I'm a UX/UI designer and educator based in Seoul with 9+ years of
+                experience. I specialize in app design, landing pages, detail pages,
+                and conversion-focused UX.
+              </p>
+            </div>
+
+            <div class="about__skills" aria-label="Skills">
+              <ul class="tag-list">
+                <li class="tag">Mobile App Design</li>
+                <li class="tag">Web Design</li>
+                <li class="tag">Detail Page</li>
+                <li class="tag">UX/UI Education</li>
+                <li class="tag">Figma</li>
+                <li class="tag">User Research</li>
+                <li class="tag">Conversion Optimization</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section id="contact" class="section section--contact" aria-label="Contact">
+        <div class="container">
+          <div class="contact">
+            <header class="contact__head">
+              <h2 class="contact__title">Let's work together.</h2>
+              <p class="contact__subtext">
+                Open to freelance projects and collaborations.
+              </p>
+            </header>
+
+            <div class="contact__actions" aria-label="Contact actions">
+              <a class="btn btn--outline" href="mailto:hello@needesignlab.com"
+                >Email</a
+              >
+              <a
+                class="btn btn--outline"
+                href="https://instagram.com/"
+                target="_blank"
+                rel="noreferrer"
+                >Instagram</a
+              >
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer" role="contentinfo">
+      <div class="container footer__inner">
+        <p class="footer__text">© <span class="footer__year">2026</span> Needesignlab</p>
+        <a class="footer__link" href="#hero">Back to top</a>
+      </div>
+    </footer>
+  </body>
+</html>
