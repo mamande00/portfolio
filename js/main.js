@@ -1,3 +1,55 @@
+
+async function loadComponent(selector, file) {
+    try {
+        const response = await fetch(file);
+        if (!response.ok) throw new Error("Failed to load component");
+        const content = await response.text();
+        document.querySelector(selector).innerHTML = content;
+        
+        const isIndexPage = (() => {
+            const path = window.location.pathname;
+            return path.endsWith("/") || path.endsWith("\\") || path.endsWith("/index.html") || path.endsWith("\\index.html") || path.endsWith("index.html");
+        })();
+
+        // 인덱스에서는 해시 링크로 보정(새로고침/리로드 방지)
+        if (selector === '.site-header' && isIndexPage) {
+            const headerRoot = document.querySelector('.site-header');
+            if (headerRoot) {
+                const brand = headerRoot.querySelector('.brand');
+                if (brand) brand.setAttribute('href', '#hero');
+
+                headerRoot.querySelectorAll('.nav__link').forEach((a) => {
+                    const href = a.getAttribute('href') || '';
+                    const hashIndex = href.indexOf('#');
+                    if (hashIndex >= 0) a.setAttribute('href', href.slice(hashIndex));
+                });
+            }
+        }
+
+        // 푸터 연도 자동 업데이트 + 인덱스용 링크/라벨 보정
+        if (selector === '.site-footer') {
+            const yearSpan = document.querySelector('.footer__year');
+            if (yearSpan) yearSpan.textContent = new Date().getFullYear();
+
+            if (isIndexPage) {
+                const footerLink = document.querySelector('.footer__link');
+                if (footerLink) {
+                    footerLink.setAttribute('href', '#hero');
+                    footerLink.textContent = 'Back to top';
+                }
+            }
+        }
+    } catch (error) {
+        console.error(`Error loading ${file}:`, error);
+    }
+}
+
+// 페이지 로드 시 실행
+document.addEventListener("DOMContentLoaded", () => {
+    loadComponent(".site-header", "components/header.html");
+    loadComponent(".site-footer", "components/footer.html");
+});
+
 (() => {
   const root = document.querySelector("[data-hero-slider]");
   if (!root) return;
