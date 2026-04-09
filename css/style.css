@@ -71,6 +71,10 @@ svg {
   max-width: 100%;
 }
 
+main img {
+  cursor: zoom-in;
+}
+
 input,
 button,
 textarea,
