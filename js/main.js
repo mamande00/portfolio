@@ -359,6 +359,44 @@ document.addEventListener("DOMContentLoaded", async () => {
         );
     }
 
+    async function hydrateProjectCardTitlesFromProjectPages() {
+        if (!isIndexPage) return;
+
+        const cards = Array.from(
+            document.querySelectorAll(".work-grid a.project-card[href]")
+        );
+        if (!cards.length) return;
+
+        await Promise.all(
+            cards.map(async (card) => {
+                const href = card.getAttribute("href");
+                if (!href) return;
+
+                let pageUrl;
+                try {
+                    pageUrl = new URL(href, window.location.href).toString();
+                } catch {
+                    return;
+                }
+
+                const titleEl = card.querySelector(".project-card__title");
+                const fallbackTitle = titleEl?.textContent?.trim() ?? "";
+
+                try {
+                    const htmlText = await fetchHtml(pageUrl);
+                    const parsed = parseProjectPageForHero(htmlText, pageUrl);
+                    const titleText = parsed.title || fallbackTitle;
+                    if (!titleText) return;
+
+                    if (titleEl) titleEl.textContent = titleText;
+                    card.setAttribute("aria-label", `새 탭에서 프로젝트 열기: ${titleText}`);
+                } catch (e) {
+                    console.warn("Card title hydrate failed:", pageUrl, e);
+                }
+            })
+        );
+    }
+
     async function hydrateSelectedProjectThumbnails() {
         if (!isIndexPage) return;
 
@@ -416,6 +454,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     await hydrateHeroSlidesFromSelectedProjects();
+    await hydrateProjectCardTitlesFromProjectPages();
     await hydrateSelectedProjectThumbnails();
 
     initLightbox();
