@@ -227,6 +227,75 @@ function initHeroSlider() {
   setPaused(isPaused);
 }
 
+function initWorkFilters() {
+  const root = document.querySelector(".work-filters");
+  const grid = document.querySelector(".work-grid");
+  if (!root || !grid) return;
+
+  const buttons = Array.from(root.querySelectorAll("[data-work-filter]")).filter(
+    (el) => el instanceof HTMLButtonElement
+  );
+  if (!buttons.length) return;
+
+  const selected = new Set();
+
+  function getCardCategorySet(card) {
+    const set = new Set();
+    card.classList.forEach((c) => {
+      if (c.startsWith("project-card--")) set.add(c.replace("project-card--", ""));
+    });
+    return set;
+  }
+
+  function syncButtons() {
+    buttons.forEach((btn) => {
+      const key = btn.getAttribute("data-work-filter") || "";
+      const on = key === "all" ? selected.size === 0 : selected.has(key);
+      btn.setAttribute("aria-pressed", String(on));
+    });
+  }
+
+  function apply() {
+    const cards = Array.from(grid.querySelectorAll("a.project-card"));
+    cards.forEach((card) => {
+      if (!(card instanceof HTMLElement)) return;
+
+      if (selected.size === 0) {
+        card.style.display = "";
+        return;
+      }
+
+      const categories = getCardCategorySet(card);
+      const match = Array.from(selected).some((k) => categories.has(k));
+      card.style.display = match ? "" : "none";
+    });
+  }
+
+  root.addEventListener("click", (e) => {
+    const btn =
+      e.target instanceof Element ? e.target.closest("[data-work-filter]") : null;
+    if (!(btn instanceof HTMLButtonElement)) return;
+    const key = btn.getAttribute("data-work-filter");
+    if (!key) return;
+
+    if (key === "all") {
+      selected.clear();
+    } else {
+      // single-select: clicking one chip turns off others
+      selected.clear();
+      selected.add(key);
+    }
+
+    syncButtons();
+    apply();
+  });
+
+  // initial state = All
+  selected.clear();
+  syncButtons();
+  apply();
+}
+
 // 페이지 로드 시 실행
 document.addEventListener("DOMContentLoaded", async () => {
     loadComponent(".site-header", "components/header.html");
@@ -458,6 +527,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     await hydrateSelectedProjectThumbnails();
 
     initLightbox();
+    initWorkFilters();
     initHeroSlider();
 
     function initLightbox() {
@@ -510,6 +580,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.addEventListener("click", (e) => {
             const img = e.target instanceof Element ? e.target.closest("main img") : null;
             if (!(img instanceof HTMLImageElement)) return;
+            if (img.closest("[data-hero-slider]")) return;
             const src = img.currentSrc || img.src;
             if (!src) return;
             open(src);

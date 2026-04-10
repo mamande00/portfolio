@@ -29,6 +29,8 @@
 
     <link rel="stylesheet" href="css/style.css?v=20260410" />
     <script src="js/main.js?v=20260410" defer></script>
+    <script src="https://cdn.amplitude.com/script/1c5ca27560c9afab7ae6924a81fe93e2.js"></script><script>window.amplitude.add(window.sessionReplay.plugin({sampleRate: 1}));window.amplitude.init('1c5ca27560c9afab7ae6924a81fe93e2', {"fetchRemoteConfig":true,"autocapture":{"attribution":true,"fileDownloads":true,"formInteractions":true,"pageViews":true,"sessions":true,"elementInteractions":true,"networkTracking":true,"webVitals":true,"frustrationInteractions":{"thrashedCursor":true,"errorClicks":true,"deadClicks":true,"rageClicks":true}}});</script>
+    
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
@@ -184,54 +186,18 @@
             <h2 class="section-head__title">포트폴리오</h2>
           </header>
 
-          <!-- CSS-only filter targets -->
-          <span
-            id="work-filter-all"
-            class="work-filter-target"
-            aria-hidden="true"
-          ></span>
-          <span
-            id="work-filter-mobile"
-            class="work-filter-target"
-            aria-hidden="true"
-          ></span>
-          <span
-            id="work-filter-web"
-            class="work-filter-target"
-            aria-hidden="true"
-          ></span>
-          <span
-            id="work-filter-detail"
-            class="work-filter-target"
-            aria-hidden="true"
-          ></span>
-          <span
-            id="work-filter-education"
-            class="work-filter-target"
-            aria-hidden="true"
-          ></span>
-          <span
-            id="work-filter-content"
-            class="work-filter-target"
-            aria-hidden="true"
-          ></span>
-
           <div class="work-filters" aria-label="Project category filters">
-            <a class="work-filters__link" href="#work-filter-all">All</a>
-            <a class="work-filters__link" href="#work-filter-mobile">Mobile App</a>
-            <a class="work-filters__link" href="#work-filter-web">Web</a>
-            <a class="work-filters__link" href="#work-filter-detail">Detail Page</a>
-            <a class="work-filters__link" href="#work-filter-education"
-              >Education</a
-            >
-            <a class="work-filters__link" href="#work-filter-content"
-              >Content Design</a
-            >
+            <button class="work-filters__link" type="button" data-work-filter="all" aria-pressed="true">All</button>
+            <button class="work-filters__link" type="button" data-work-filter="detail" aria-pressed="false">Detail Page</button>
+            <button class="work-filters__link" type="button" data-work-filter="content" aria-pressed="false">SNS</button>
+            <button class="work-filters__link" type="button" data-work-filter="web" aria-pressed="false">Web</button>
+            <button class="work-filters__link" type="button" data-work-filter="mobile" aria-pressed="false">App</button>
+            <button class="work-filters__link" type="button" data-work-filter="branding" aria-pressed="false">Branding</button>
           </div>
 
           <div class="work-grid" aria-label="Portfolio projects grid">
             <a
-              class="project-card project-card--detail"
+              class="project-card project-card--detail project-card--content"
               href="project-detail-1.html"
               target="_blank"
               rel="noopener noreferrer"
@@ -248,7 +214,7 @@
             </a>
 
             <a
-              class="project-card project-card--detail"
+              class="project-card project-card--detail project-card--content"
               href="project-detail-2.html"
               target="_blank"
               rel="noopener noreferrer"
@@ -355,27 +321,46 @@
         <div class="container">
           <header class="section-head">
             <p class="section-head__label">About</p>
-            <h2 class="section-head__title">A bit about my approach</h2>
+            <h2 class="section-head__title">디자이너 '홍길동'</h2>
           </header>
 
           <div class="about">
-            <div class="about__bio">
-              <p>
-                I'm a UX/UI designer and educator based in Seoul with 9+ years of
-                experience. I specialize in app design, landing pages, detail pages,
-                and conversion-focused UX.
-              </p>
+            <div class="about__profile" aria-label="Profile photo">
+              <img
+                src="assets/images/profile-photo.jpg"
+                alt="Profile photo"
+                loading="lazy"
+                decoding="async"
+              />
             </div>
 
-            <div class="about__skills" aria-label="Skills">
-              <ul class="tag-list">
-                <li class="tag">Mobile App Design</li>
-                <li class="tag">Web Design</li>
-                <li class="tag">Detail Page</li>
-                <li class="tag">UX/UI Education</li>
-                <li class="tag">Figma</li>
-                <li class="tag">User Research</li>
-                <li class="tag">Conversion Optimization</li>
+            <div class="about__bio">
+              <div class="about__skills" aria-label="Skills">
+                <ul class="tag-list">
+                  <li class="tag">Detail Page</li>
+                  <li class="tag">SNS</li>
+                  <li class="tag">Web</li>
+                  <li class="tag">App</li>
+                  <li class="tag">Branding</li>
+                </ul>
+              </div>
+
+              <p>
+                공무에 상체다 국회는 하는 두다. 알아낸 손님을 양파만 믿으면, 생산에서
+                관하다 불로의 배경이 조정한다. 국회의원은 남부가 해결한지 눕던
+                의거하라고, 패턴화되어야, 있은 받아들이다. 기타에서 다가오게 사이가
+                이 없은 관점의 따르기 하다.
+              </p>
+
+              <h3>학력</h3>
+              <ul>
+                <li>2026.04 ~ 08 / 서울시남부여성발전센터 ㅇㅇ 과정 이수</li>
+                <li>2021.03 ~ 2025.02 / 한국 대학교 ㅇㅇ학과</li>
+              </ul>
+
+              <h3>경력</h3>
+              <ul>
+                <li>2025.03 ~ 2025.12 / ㅇㅇ사 마케팅 팀 / 광고소재 제작</li>
               </ul>
             </div>
           </div>
@@ -385,24 +370,10 @@
         <div class="container">
           <div class="contact">
             <header class="contact__head">
-              <h2 class="contact__title">Let's work together.</h2>
-              <p class="contact__subtext">
-                Open to freelance projects and collaborations.
-              </p>
+              <h3 class="contact__title">Contact</h3>
+              <p>honggildong@gmail.com 　/　 010-1234-5678</p>
             </header>
 
-            <div class="contact__actions" aria-label="Contact actions">
-              <a class="btn btn--outline" href="mailto:hello@needesignlab.com"
-                >Email</a
-              >
-              <a
-                class="btn btn--outline"
-                href="https://instagram.com/"
-                target="_blank"
-                rel="noreferrer"
-                >Instagram</a
-              >
-            </div>
           </div>
         </div>
       </section>
