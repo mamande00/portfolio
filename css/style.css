@@ -9,10 +9,8 @@
     Roboto, "Inter", Helvetica, Arial, sans-serif;
   --font-body-en: "Roboto", "Inter", system-ui, -apple-system, Segoe UI, Helvetica,
     Arial, sans-serif;
-  --font-heading-ko: "Playfair Display", "Pretendard", "Nanum Gothic", Georgia,
-    "Times New Roman", serif;
-  --font-heading-en: "Playfair Display", "Roboto", "Inter", Georgia, "Times New Roman",
-    serif;
+  --font-heading-ko: "Pretendard", "Nanum Gothic", sans-serif;
+  --font-heading-en: "Roboto", "Inter", sans-serif;
 
   --radius: 14px;
   --shadow-sm: 0 1px 0 rgba(26, 26, 26, 0.05);

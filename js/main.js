@@ -1,10 +1,13 @@
 
 async function loadComponent(selector, file) {
     try {
+        const root = document.querySelector(selector);
+        if (!root) return;
+
         const response = await fetch(file);
         if (!response.ok) throw new Error("Failed to load component");
         const content = await response.text();
-        document.querySelector(selector).innerHTML = content;
+        root.innerHTML = content;
         
         const isIndexPage = (() => {
             const path = window.location.pathname;
@@ -48,6 +51,7 @@ async function loadComponent(selector, file) {
 document.addEventListener("DOMContentLoaded", () => {
     loadComponent(".site-header", "components/header.html");
     loadComponent(".site-footer", "components/footer.html");
+    loadComponent(".other-works-mount", "components/other-works.html");
 
     const isIndexPage = (() => {
         const path = window.location.pathname;
@@ -70,9 +74,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const htmlCache = new Map();
 
+        const CACHE_BUST = "20260409b";
+
+        function withCacheBust(url) {
+            try {
+                const u = new URL(url);
+                u.searchParams.set("v", CACHE_BUST);
+                return u.toString();
+            } catch {
+                const joiner = url.includes("?") ? "&" : "?";
+                return `${url}${joiner}v=${encodeURIComponent(CACHE_BUST)}`;
+            }
+        }
+
         async function fetchHtml(url) {
             if (htmlCache.has(url)) return htmlCache.get(url);
-            const res = await fetch(url, { cache: "force-cache" });
+            const res = await fetch(withCacheBust(url), { cache: "no-store" });
             if (!res.ok) throw new Error(`Failed to load ${url}`);
             const text = await res.text();
             htmlCache.set(url, text);
