@@ -47,163 +47,7 @@ async function loadComponent(selector, file) {
     }
 }
 
-// 페이지 로드 시 실행
-document.addEventListener("DOMContentLoaded", () => {
-    loadComponent(".site-header", "components/header.html");
-    loadComponent(".site-footer", "components/footer.html");
-    loadComponent(".other-works-mount", "components/other-works.html");
-
-    const isIndexPage = (() => {
-        const path = window.location.pathname;
-        return (
-            path.endsWith("/") ||
-            path.endsWith("\\") ||
-            path.endsWith("/index.html") ||
-            path.endsWith("\\index.html") ||
-            path.endsWith("index.html")
-        );
-    })();
-
-    async function hydrateSelectedProjectThumbnails() {
-        if (!isIndexPage) return;
-
-        const cards = Array.from(
-            document.querySelectorAll(".work-grid a.project-card[href]")
-        );
-        if (!cards.length) return;
-
-        const htmlCache = new Map();
-
-        const CACHE_BUST = "20260409b";
-
-        function withCacheBust(url) {
-            try {
-                const u = new URL(url);
-                u.searchParams.set("v", CACHE_BUST);
-                return u.toString();
-            } catch {
-                const joiner = url.includes("?") ? "&" : "?";
-                return `${url}${joiner}v=${encodeURIComponent(CACHE_BUST)}`;
-            }
-        }
-
-        async function fetchHtml(url) {
-            if (htmlCache.has(url)) return htmlCache.get(url);
-            const res = await fetch(withCacheBust(url), { cache: "no-store" });
-            if (!res.ok) throw new Error(`Failed to load ${url}`);
-            const text = await res.text();
-            htmlCache.set(url, text);
-            return text;
-        }
-
-        function getFirstImageSrc(htmlText, baseUrl) {
-            const doc = new DOMParser().parseFromString(htmlText, "text/html");
-            const img = doc.querySelector("main img[src], img[src]");
-            const rawSrc = img?.getAttribute("src");
-            if (!rawSrc) return null;
-            try {
-                return new URL(rawSrc, baseUrl).toString();
-            } catch {
-                return null;
-            }
-        }
-
-        await Promise.all(
-            cards.map(async (card) => {
-                const thumb = card.querySelector(".project-card__thumb");
-                if (!thumb) return;
-                if (thumb.querySelector("img")) return;
-
-                const href = card.getAttribute("href");
-                if (!href) return;
-
-                let pageUrl;
-                try {
-                    pageUrl = new URL(href, window.location.href).toString();
-                } catch {
-                    return;
-                }
-
-                try {
-                    const htmlText = await fetchHtml(pageUrl);
-                    const imageSrc = getFirstImageSrc(htmlText, pageUrl);
-                    if (!imageSrc) return;
-
-                    const img = document.createElement("img");
-                    img.src = imageSrc;
-                    img.alt = "";
-                    img.loading = "lazy";
-                    img.decoding = "async";
-                    thumb.appendChild(img);
-                } catch (e) {
-                    console.warn("Thumbnail hydrate failed:", pageUrl, e);
-                }
-            })
-        );
-    }
-
-    hydrateSelectedProjectThumbnails();
-
-    function initLightbox() {
-        const root = document.createElement("div");
-        root.className = "lightbox";
-        root.setAttribute("role", "dialog");
-        root.setAttribute("aria-modal", "true");
-        root.setAttribute("aria-label", "Image preview");
-        root.hidden = true;
-
-        root.innerHTML = `
-          <button class="lightbox__close" type="button" aria-label="Close">×</button>
-          <div class="lightbox__backdrop" data-lightbox-backdrop></div>
-          <img class="lightbox__img" alt="" />
-        `;
-
-        document.body.appendChild(root);
-
-        const imgEl = root.querySelector(".lightbox__img");
-        const closeBtn = root.querySelector(".lightbox__close");
-        const backdrop = root.querySelector("[data-lightbox-backdrop]");
-
-        function open(src) {
-            if (!(imgEl instanceof HTMLImageElement)) return;
-            imgEl.src = src;
-            root.hidden = false;
-            document.documentElement.classList.add("is-lightbox-open");
-            closeBtn?.focus?.();
-        }
-
-        function close() {
-            if (!(imgEl instanceof HTMLImageElement)) return;
-            root.hidden = true;
-            imgEl.removeAttribute("src");
-            document.documentElement.classList.remove("is-lightbox-open");
-        }
-
-        closeBtn?.addEventListener("click", close);
-        backdrop?.addEventListener("click", close);
-        root.addEventListener("click", (e) => {
-            // safety: clicking around the image closes
-            if (e.target === root) close();
-        });
-
-        document.addEventListener("keydown", (e) => {
-            if (e.key === "Escape" && !root.hidden) close();
-        });
-
-        // Enable click-to-zoom for content images only
-        document.addEventListener("click", (e) => {
-            const img = e.target instanceof Element ? e.target.closest("main img") : null;
-            if (!(img instanceof HTMLImageElement)) return;
-            const src = img.currentSrc || img.src;
-            if (!src) return;
-            open(src);
-        });
-    }
-
-    initLightbox();
-});
-
-(() => {
+function initHeroSlider() {
   const root = document.querySelector("[data-hero-slider]");
   if (!root) return;
 
@@ -381,4 +225,255 @@ document.addEventListener("DOMContentLoaded", () => {
   updateDots();
   announce();
   setPaused(isPaused);
-})();
+}
+
+// 페이지 로드 시 실행
+document.addEventListener("DOMContentLoaded", async () => {
+    loadComponent(".site-header", "components/header.html");
+    loadComponent(".site-footer", "components/footer.html");
+    loadComponent(".other-works-mount", "components/other-works.html");
+
+    const isIndexPage = (() => {
+        const path = window.location.pathname;
+        return (
+            path.endsWith("/") ||
+            path.endsWith("\\") ||
+            path.endsWith("/index.html") ||
+            path.endsWith("\\index.html") ||
+            path.endsWith("index.html")
+        );
+    })();
+
+    const CACHE_BUST = "20260410c";
+    const htmlCache = new Map();
+
+    function withCacheBust(url) {
+        try {
+            const u = new URL(url);
+            u.searchParams.set("v", CACHE_BUST);
+            return u.toString();
+        } catch {
+            const joiner = url.includes("?") ? "&" : "?";
+            return `${url}${joiner}v=${encodeURIComponent(CACHE_BUST)}`;
+        }
+    }
+
+    async function fetchHtml(url) {
+        if (htmlCache.has(url)) return htmlCache.get(url);
+        const res = await fetch(withCacheBust(url), { cache: "no-store" });
+        if (!res.ok) throw new Error(`Failed to load ${url}`);
+        const text = await res.text();
+        htmlCache.set(url, text);
+        return text;
+    }
+
+    function parseProjectPageForHero(htmlText, baseUrl) {
+        const doc = new DOMParser().parseFromString(htmlText, "text/html");
+        const label =
+            doc.querySelector(".section-head__label")?.textContent?.trim() ?? "";
+        const title =
+            doc.querySelector(".section-head__title")?.textContent?.trim() ?? "";
+        const subtitle =
+            doc.querySelector(".section-head__subtitle")?.textContent?.trim() ?? "";
+        const imgEl = doc.querySelector(
+            "main img.article__cover[src], main img[src]"
+        );
+        const rawSrc = imgEl?.getAttribute("src");
+        let imageSrc = null;
+        if (rawSrc) {
+            try {
+                imageSrc = new URL(rawSrc, baseUrl).toString();
+            } catch {
+                imageSrc = null;
+            }
+        }
+        return { label, title, subtitle, imageSrc };
+    }
+
+    async function hydrateHeroSlidesFromSelectedProjects() {
+        if (!isIndexPage) return;
+
+        const cards = Array.from(
+            document.querySelectorAll(".work-grid a.project-card[href]")
+        ).slice(0, 3);
+        const slides = Array.from(
+            document.querySelectorAll("[data-hero-track] .hero-slide")
+        );
+        const n = Math.min(cards.length, slides.length, 3);
+        if (!n) return;
+
+        await Promise.all(
+            Array.from({ length: n }, async (_, i) => {
+                const card = cards[i];
+                const slide = slides[i];
+                const href = card.getAttribute("href");
+                if (!href || !slide) return;
+
+                let pageUrl;
+                try {
+                    pageUrl = new URL(href, window.location.href).toString();
+                } catch {
+                    return;
+                }
+
+                const cardTitle =
+                    card.querySelector(".project-card__title")?.textContent?.trim() ??
+                    "";
+                const cardCategory =
+                    card.querySelector(".project-card__category")?.textContent?.trim() ??
+                    "";
+                const cardDesc =
+                    card.querySelector(".project-card__desc")?.textContent?.trim() ??
+                    "";
+
+                try {
+                    const htmlText = await fetchHtml(pageUrl);
+                    const parsed = parseProjectPageForHero(htmlText, pageUrl);
+
+                    const titleText = parsed.title || cardTitle;
+                    const metaText = parsed.label || cardCategory;
+                    const subText = parsed.subtitle || cardDesc;
+
+                    slide.setAttribute("href", href);
+                    slide.setAttribute(
+                        "aria-label",
+                        `새 탭에서 프로젝트 열기: ${titleText}`
+                    );
+
+                    const metaEl = slide.querySelector(".hero-slide__meta");
+                    const titleEl = slide.querySelector(".hero-slide__title");
+                    const subEl = slide.querySelector(".hero-slide__subtext");
+                    const imgEl = slide.querySelector(".hero-slide__img");
+
+                    if (metaEl) metaEl.textContent = metaText;
+                    if (titleEl) titleEl.textContent = titleText;
+                    if (subEl) subEl.textContent = subText;
+                    if (imgEl instanceof HTMLImageElement && parsed.imageSrc) {
+                        imgEl.src = parsed.imageSrc;
+                        imgEl.loading = i === 0 ? "eager" : "lazy";
+                    }
+                } catch (e) {
+                    console.warn("Hero hydrate failed:", pageUrl, e);
+                }
+            })
+        );
+    }
+
+    async function hydrateSelectedProjectThumbnails() {
+        if (!isIndexPage) return;
+
+        const cards = Array.from(
+            document.querySelectorAll(".work-grid a.project-card[href]")
+        );
+        if (!cards.length) return;
+
+        function getFirstImageSrc(htmlText, baseUrl) {
+            const doc = new DOMParser().parseFromString(htmlText, "text/html");
+            const img = doc.querySelector(
+                "main img.article__cover[src], main img[src]"
+            );
+            const rawSrc = img?.getAttribute("src");
+            if (!rawSrc) return null;
+            try {
+                return new URL(rawSrc, baseUrl).toString();
+            } catch {
+                return null;
+            }
+        }
+
+        await Promise.all(
+            cards.map(async (card) => {
+                const thumb = card.querySelector(".project-card__thumb");
+                if (!thumb) return;
+                if (thumb.querySelector("img")) return;
+
+                const href = card.getAttribute("href");
+                if (!href) return;
+
+                let pageUrl;
+                try {
+                    pageUrl = new URL(href, window.location.href).toString();
+                } catch {
+                    return;
+                }
+
+                try {
+                    const htmlText = await fetchHtml(pageUrl);
+                    const imageSrc = getFirstImageSrc(htmlText, pageUrl);
+                    if (!imageSrc) return;
+
+                    const img = document.createElement("img");
+                    img.src = imageSrc;
+                    img.alt = "";
+                    img.loading = "lazy";
+                    img.decoding = "async";
+                    thumb.appendChild(img);
+                } catch (e) {
+                    console.warn("Thumbnail hydrate failed:", pageUrl, e);
+                }
+            })
+        );
+    }
+
+    await hydrateHeroSlidesFromSelectedProjects();
+    await hydrateSelectedProjectThumbnails();
+
+    initLightbox();
+    initHeroSlider();
+
+    function initLightbox() {
+        const root = document.createElement("div");
+        root.className = "lightbox";
+        root.setAttribute("role", "dialog");
+        root.setAttribute("aria-modal", "true");
+        root.setAttribute("aria-label", "Image preview");
+        root.hidden = true;
+
+        root.innerHTML = `
+          <button class="lightbox__close" type="button" aria-label="Close">×</button>
+          <div class="lightbox__backdrop" data-lightbox-backdrop></div>
+          <img class="lightbox__img" alt="" />
+        `;
+
+        document.body.appendChild(root);
+
+        const imgEl = root.querySelector(".lightbox__img");
+        const closeBtn = root.querySelector(".lightbox__close");
+        const backdrop = root.querySelector("[data-lightbox-backdrop]");
+
+        function open(src) {
+            if (!(imgEl instanceof HTMLImageElement)) return;
+            imgEl.src = src;
+            root.hidden = false;
+            document.documentElement.classList.add("is-lightbox-open");
+            closeBtn?.focus?.();
+        }
+
+        function close() {
+            if (!(imgEl instanceof HTMLImageElement)) return;
+            root.hidden = true;
+            imgEl.removeAttribute("src");
+            document.documentElement.classList.remove("is-lightbox-open");
+        }
+
+        closeBtn?.addEventListener("click", close);
+        backdrop?.addEventListener("click", close);
+        root.addEventListener("click", (e) => {
+            // safety: clicking around the image closes
+            if (e.target === root) close();
+        });
+
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "Escape" && !root.hidden) close();
+        });
+
+        // Enable click-to-zoom for content images only
+        document.addEventListener("click", (e) => {
+            const img = e.target instanceof Element ? e.target.closest("main img") : null;
+            if (!(img instanceof HTMLImageElement)) return;
+            const src = img.currentSrc || img.src;
+            if (!src) return;
+            open(src);
+        });
+    }
+});

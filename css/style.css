@@ -402,7 +402,7 @@ main > section:nth-of-type(4) {
 }
 
 .section-head {
-  margin-bottom: var(--space-5);
+  margin-bottom: var(--space-7);
 }
 
 .section-head__label {
@@ -424,6 +424,15 @@ main > section:nth-of-type(4) {
 
 :lang(ko) .section-head__title {
   font-family: var(--font-heading-ko);
+}
+
+.section-head__subtitle {
+  margin: var(--space-3) 0 0;
+  max-width: 60ch;
+  color: var(--color-muted);
+  font-size: clamp(14px, 1.6vw, 18px);
+  line-height: 1.6;
+  font-weight: 400;
 }
 
 /* Hero slider */
@@ -583,7 +592,7 @@ main > section:nth-of-type(4) {
   border-radius: var(--radius);
   background: #f0f0f0;
   border: 1px solid var(--color-border);
-  margin-bottom: var(--space-5);
+  margin-bottom: var(--space-7);
 }
 
 .article__title {
@@ -608,17 +617,16 @@ main > section:nth-of-type(4) {
 .meta-table {
   width: 100%;
   border-collapse: collapse;
-  border: 1px solid var(--color-border);
-  border-radius: 12px;
-  overflow: hidden;
+  border: none;
   background: var(--color-bg);
-  margin: 0 0 var(--space-5);
+  margin: 0 0 var(--space-7);
 }
 
 .meta-table th,
 .meta-table td {
   padding: 14px 16px;
-  border-top: 1px solid var(--color-border);
+  border-left: 1px solid var(--color-border);
+  border-right: 1px solid var(--color-border);
   text-align: left;
   vertical-align: top;
   color: var(--color-text);
@@ -627,9 +635,20 @@ main > section:nth-of-type(4) {
   font-weight: 400;
 }
 
+/* Row dividers; outer frame is built from cell borders */
+.meta-table tr + tr th,
+.meta-table tr + tr td {
+  border-top: 1px solid var(--color-border);
+}
+
+.meta-table tr:first-child th,
+.meta-table tr:first-child td {
+  border-top: 1px solid #000;
+}
+
 .meta-table tr:last-child th,
 .meta-table tr:last-child td {
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: 1px solid #000;
 }
 
 .meta-table th {
@@ -897,6 +916,7 @@ main > section:nth-of-type(4) {
   font-size: clamp(12px, 1.2vw, 14px);
   display: -webkit-box;
   -webkit-line-clamp: 1;
+  line-clamp: 1;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
