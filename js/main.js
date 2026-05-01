@@ -581,6 +581,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             const img = e.target instanceof Element ? e.target.closest("main img") : null;
             if (!(img instanceof HTMLImageElement)) return;
             if (img.closest("[data-hero-slider]")) return;
+            // 홈 포트폴리오(Work) 카드 썸네일은 새 탭 이동이 목적이므로 확대 제외
+            if (img.closest(".work-grid a.project-card")) return;
             const src = img.currentSrc || img.src;
             if (!src) return;
             open(src);
