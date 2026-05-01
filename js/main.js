@@ -19,7 +19,7 @@ async function loadComponent(selector, file) {
             const headerRoot = document.querySelector('.site-header');
             if (headerRoot) {
                 const brand = headerRoot.querySelector('.brand');
-                if (brand) brand.setAttribute('href', '#hero');
+                if (brand) brand.setAttribute('href', '#main');
 
                 headerRoot.querySelectorAll('.nav__link').forEach((a) => {
                     const href = a.getAttribute('href') || '';
@@ -37,7 +37,7 @@ async function loadComponent(selector, file) {
             if (isIndexPage) {
                 const footerLink = document.querySelector('.footer__link');
                 if (footerLink) {
-                    footerLink.setAttribute('href', '#hero');
+                    footerLink.setAttribute('href', '#main');
                     footerLink.textContent = 'Back to top';
                 }
             }
