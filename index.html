@@ -36,6 +36,9 @@
       window.amplitude.add(window.sessionReplay.plugin({ sampleRate: 1 }));
       window.amplitude.init("1c5ca27560c9afab7ae6924a81fe93e2", {
         fetchRemoteConfig: true,
+        sessionReplay: {
+          maskAllText: false,
+        },
         autocapture: {
           attribution: true,
           fileDownloads: true,
