@@ -466,6 +466,42 @@ document.addEventListener("DOMContentLoaded", async () => {
         );
     }
 
+    async function hydrateProjectCardDescsFromProjectPages() {
+        if (!isIndexPage) return;
+
+        const cards = Array.from(
+            document.querySelectorAll(".work-grid a.project-card[href]")
+        );
+        if (!cards.length) return;
+
+        await Promise.all(
+            cards.map(async (card) => {
+                const href = card.getAttribute("href");
+                if (!href) return;
+
+                let pageUrl;
+                try {
+                    pageUrl = new URL(href, window.location.href).toString();
+                } catch {
+                    return;
+                }
+
+                const descEl = card.querySelector(".project-card__desc");
+                const fallbackDesc = descEl?.textContent?.trim() ?? "";
+
+                try {
+                    const htmlText = await fetchHtml(pageUrl);
+                    const parsed = parseProjectPageForHero(htmlText, pageUrl);
+                    const descText = parsed.subtitle || fallbackDesc;
+                    if (!descText) return;
+                    if (descEl) descEl.textContent = descText;
+                } catch (e) {
+                    console.warn("Card desc hydrate failed:", pageUrl, e);
+                }
+            })
+        );
+    }
+
     async function hydrateSelectedProjectThumbnails() {
         if (!isIndexPage) return;
 
@@ -524,6 +560,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     await hydrateHeroSlidesFromSelectedProjects();
     await hydrateProjectCardTitlesFromProjectPages();
+    await hydrateProjectCardDescsFromProjectPages();
     await hydrateSelectedProjectThumbnails();
 
     initLightbox();
