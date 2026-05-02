@@ -313,6 +313,21 @@ document.addEventListener("DOMContentLoaded", async () => {
         );
     })();
 
+    /** Live Preview 등에서 target=_blank 가 포트 없는 127.0.0.1 로 열리는 경우 방지 */
+    function normalizeWorkGridCardHrefsToAbsolute() {
+        if (!isIndexPage) return;
+        document.querySelectorAll(".work-grid a.project-card[href]").forEach((a) => {
+            const href = a.getAttribute("href");
+            if (!href || href.startsWith("#") || href.startsWith("javascript:")) return;
+            try {
+                a.setAttribute("href", new URL(href, window.location.href).href);
+            } catch {
+                /* ignore invalid href */
+            }
+        });
+    }
+    normalizeWorkGridCardHrefsToAbsolute();
+
     const CACHE_BUST = "20260410c";
     const htmlCache = new Map();
 
